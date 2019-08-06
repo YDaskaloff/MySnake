@@ -11,3 +11,5 @@ https://www.youtube.com/watch?v=9TcU2C1AACw
 https://www.freecodecamp.org/news/think-like-a-programmer-how-to-build-snake-using-only-javascript-html-and-css-7b1479c3339e/
 - this one helped me fix a bug I had when the snake was eating. It was caused by the overcomplicated method I used to grow my snake. 
 More on this can be seen in the comments in my code.
+
+Enjoy!
