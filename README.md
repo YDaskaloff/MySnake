@@ -4,6 +4,7 @@ tutorials, which are listed below. However, the code for the game is mainly my o
 the tutorials.
 
 Tutorials: 
+
 https://www.youtube.com/watch?v=9TcU2C1AACw
 - from this one I got the idea of how to move the snake - popping the last piece and unshifting a new head in front of the snake. 
 
