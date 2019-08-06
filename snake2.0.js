@@ -16,6 +16,7 @@ function View(params) {
 	this.speed = params.speed;
 	this.foodColor = params.foodColor;
 	this.headColor = params.headColor;
+	this.speedMargin = params.speedMargin;
 }
 
 let viewParams = {
@@ -25,7 +26,8 @@ let viewParams = {
 	bodyColor: "green",
 	headColor: "darkgreen",
 	speed: 500,
-	foodColor: "red"
+	foodColor: "red",
+	speedMargin: 100
 };
 let view = new View(viewParams);
 
@@ -94,6 +96,15 @@ let snake = new Snake(snakeParams);
 Snake.prototype.food = {
 	x: 0,
 	y: 0
+}
+
+Snake.prototype.upSpeed = function() {
+	if (score % 100 === 0) {
+		view.speed -= view.speedMargin;;
+		if (view.speed === 100) {
+			view.speed = 100;
+		}
+	} 
 }
 
 Snake.prototype.collision = function() {
@@ -180,6 +191,7 @@ Snake.prototype.move = function(m1, m2) {
 			view.drawSnake(snake.coords, view.bodyColor, view.headColor);	
 			view.updateScore();
 			this.genFood();
+			this.upSpeed();
 		} else {
 			let lastSnake = this.coords[this.coords.length-1];
 			view.drawBox(lastSnake.x, lastSnake.y, view.VACANT);
