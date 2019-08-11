@@ -1,9 +1,43 @@
 
 document.addEventListener("keydown", changeDir);
-let dir = "right";
+let dir;
 let tailDir;
 let goStart = Date.now();
 let score = 0;
+
+let viewParams = {
+	boardSize: 17,
+	box: 32,
+	VACANT: "white",
+	bodyColor: "green",
+	headColor: "darkgreen",
+	speed: 500,
+	foodColor: "red",
+	speedMargin: 100
+};
+let view = new View(viewParams);
+
+let snakeParams = {
+	coords: [{x: 7, y: 8}, {x: 6, y: 8}, {x: 5, y: 8}]
+}
+let snake = new Snake(snakeParams);
+
+
+let slideLeft = function() {
+	snake.move(-1, 0);	
+}
+
+let slideUp = function() {
+	snake.move(0, -1);
+}
+
+let slideRight = function() {
+	snake.move(1, 0);
+}
+
+let slideDown = function() {
+	snake.move(0, 1);
+}
 
 function View(params) {
 	this.canvas = document.getElementById("canvas");
@@ -18,18 +52,6 @@ function View(params) {
 	this.headColor = params.headColor;
 	this.speedMargin = params.speedMargin;
 }
-
-let viewParams = {
-	boardSize: 17,
-	box: 32,
-	VACANT: "white",
-	bodyColor: "green",
-	headColor: "darkgreen",
-	speed: 500,
-	foodColor: "red",
-	speedMargin: 100
-};
-let view = new View(viewParams);
 
 View.prototype.updateScore = function() {
 	score += 10;
@@ -82,12 +104,11 @@ View.prototype.gameOver = function() {
 }
 
 View.prototype.upSpeed = function() {
-	if (score % 100 === 0) {
-		view.speed -= view.speedMargin;;
-		if (view.speed === 100) {
-			view.speed = 100;
-		}
-	} 
+	if (view.speed > 150) {
+		if (score % 100 === 0) {
+			view.speed -= view.speedMargin;;
+		} 
+	}	
 }
 
 function Snake(params) {
@@ -96,11 +117,6 @@ function Snake(params) {
 
 	this.coords = params.coords;
 }
-
-let snakeParams = {
-	coords: [{x: 7, y: 8}, {x: 6, y: 8}, {x: 5, y: 8}]
-}
-let snake = new Snake(snakeParams);
 
 Snake.prototype.food = {
 	x: 0,
@@ -142,7 +158,7 @@ Snake.prototype.genFood = function() {
 	}
 }
 
-//Getting the direction of the tail (way too complicated ang buggy):
+//Getting the direction of the tail (way too complicated and buggy):
 /*Snake.prototype.getTailDir = function() {
 	let x1 = this.coords[this.coords.length-1].x;
 	let x2 = this.coords[this.coords.length-2].x;
@@ -180,10 +196,6 @@ Snake.prototype.genFood = function() {
 }*/
 
 Snake.prototype.move = function(m1, m2) {
-	/*if (this.eat()) {	
-		view.updateScore();
-		this.grow();
-	}*/
 	if (!view.gameOver()) {	
 		if(this.eat()) {
 			let lastSnake = this.coords[this.coords.length-1];
@@ -200,22 +212,6 @@ Snake.prototype.move = function(m1, m2) {
 			view.drawSnake(snake.coords, view.bodyColor, view.headColor);	
 		}		
 	}	
-}
-
-let slideLeft = function() {
-	snake.move(-1, 0);	
-}
-
-let slideUp = function() {
-	snake.move(0, -1);
-}
-
-let slideRight = function() {
-	snake.move(1, 0);
-}
-
-let slideDown = function() {
-	snake.move(0, 1);
 }
 
 function changeDir(event) {
@@ -243,20 +239,29 @@ function go() {
 	let now = Date.now();
 	let delta = now - goStart;
 	if (delta > view.speed) {
-		if (dir === "left") {
-			slideLeft();
-			goStart = Date.now();
-		} else if (dir === "up") {
-			slideUp();
-			goStart = Date.now();
-		} else if (dir === "right") {
-			slideRight();
-			goStart = Date.now();
-		} else if (dir === "down") {
-			slideDown();
-			goStart = Date.now();
+		switch (dir) {
+			case "left":
+				slideLeft();
+				goStart = Date.now();
+				break;
+			case "up":
+				slideUp();
+				goStart = Date.now();
+				break;
+			case "right":
+				slideRight();
+				goStart = Date.now();
+				break;
+			case "down":
+				slideDown();
+				goStart = Date.now();
+				break;
+			default: 
+				slideRight();
+				goStart = Date.now();
+				break;
 		}
-	}
+	}		
 	if (!view.gameOver()) {
 		requestAnimationFrame(go);
 	}
