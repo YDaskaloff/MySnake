@@ -1,6 +1,6 @@
 # MySnake
 This is my first stand-alone project with any programming language. It's a simple snake game. I took inspiration for it from two 
-tutorials, which are listed below. However, the code for the game is mainly my own, as can be seen if compared with that of 
+tutorials, which are listed below. However, the code for the game is mainly my own, as can be seen if compared with that from 
 the tutorials.
 
 Tutorials: 
