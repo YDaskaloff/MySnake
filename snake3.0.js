@@ -1,13 +1,16 @@
 
 document.addEventListener("keydown", changeDir);
+let canvas = document.getElementById("canvas");
+
 let dir;
 let tailDir;
 let goStart = Date.now();
 let score = 0;
+let size = window.innerHeight;
 
 let viewParams = {
 	boardSize: 17,
-	box: 32,
+	box: size >= 722 ? 32 : 28,
 	VACANT: "white",
 	bodyColor: "green",
 	headColor: "darkgreen",
@@ -36,6 +39,10 @@ function View(params) {
 	this.headColor = params.headColor;
 	this.speedMargin = params.speedMargin;
 }
+
+canvasS = view.box*17;
+canvas.setAttribute("height", canvasS);
+canvas.setAttribute("width", canvasS);
 
 View.prototype.updateScore = function() {
 	score += 10;
@@ -207,20 +214,27 @@ Snake.prototype.slideDown = function() {
 	this.move(0, 1);
 }
 
+Snake.prototype.dir = {
+	"left": 0,
+	"up": 1,
+	"right": 2,
+	"down": 3
+}
+
 function changeDir(event) {
 	let x = event.keyCode;
-	if (x === 37 && dir !== "right") {
+	if (x === 37 && dir !== snake.dir.right) {
 		snake.slideLeft();
-		dir = "left";
-	} else if (x === 38 && dir !== "down") {
+		dir = snake.dir.left;
+	} else if (x === 38 && dir !== snake.dir.down) {
 		snake.slideUp();
-		dir = "up";
-	} else if (x === 39 && dir !== "left") {
+		dir = snake.dir.up;
+	} else if (x === 39 && dir !== snake.dir.left) {
 		snake.slideRight();
-		dir = "right";
-	} else if (x === 40 && dir !== "up") {
+		dir = snake.dir.right;
+	} else if (x === 40 && dir !== snake.dir.up) {
 		snake.slideDown();
-		dir = "down";		
+		dir = snake.dir.down;		
 	}
 	goStart = Date.now();
 }
@@ -230,20 +244,21 @@ function go() {
 	let delta = now - goStart;
 	if (delta > view.speed) {
 		switch (dir) {
-			case "left":
+			case snake.dir.left:
 				snake.slideLeft();
 				break;
-			case "up":
+			case snake.dir.up:
 				snake.slideUp();
 				break;
-			case "right":
+			case snake.dir.right:
 				snake.slideRight();
 				break;
-			case "down":
+			case snake.dir.down:
 				snake.slideDown();
 				break;
 			default: 
-				snake.slideRight();				
+				snake.slideRight();
+				dir = snake.dir.right;				
 				break;
 		}
 		goStart = Date.now();
